@@ -11,6 +11,11 @@ def index(request):
         "form": SearchForm()
     })
 
+def new_entry(request):
+    return render(request, "encyclopedia/new_entry.html", {
+        "form": SearchForm()
+    })
+
 def entry(request, title):
     entry = util.get_entry(title)
     if entry == None:
