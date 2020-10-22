@@ -53,11 +53,16 @@ def entry(request, title):
         "form": SearchForm()
     })
 
-def edit(request, title):
-    entry = util.get_entry(title)
-    if entry == None:
-        entry = "The requested page was not found."
-    return render(request, "encyclopedia/edit.html", {
+def edit(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        entry = util.get_entry(title)
+        return render(request, "encyclopedia/edit.html", {
+            "entry": entry,
+            "title": title,
+            "form": SearchForm()
+        })
+    return render(request, "encyclopedia/entry.html", {
         "entry": entry,
         "title": title,
         "form": SearchForm()
