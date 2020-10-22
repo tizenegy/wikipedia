@@ -6,11 +6,15 @@
 
 {% block body %}
     <h1>Create New Page</h1>
-
+    <div>
+        {{ message }}
+    </div>
     <ul>
-        {% for entry in entries %}
-
-        {% endfor %}
+        <form action="{% url 'encyclopedia:new_entry' %}" method="POST">
+            {% csrf_token %}
+            {{ entry_form }}
+            <input type="submit" value="Save">
+        </form>
     </ul>
 
 {% endblock %}
