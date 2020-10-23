@@ -5,9 +5,10 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ title }}</h1>
     <div>
+        {% autoescape off %}
         {{ entry }}
+        {% endautoescape %}
     </div>
     <div>
         {{ message }}

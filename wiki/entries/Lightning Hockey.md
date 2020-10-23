@@ -1,1 +1,0 @@
-from Tampa Bay

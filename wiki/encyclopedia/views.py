@@ -2,6 +2,7 @@ from django.shortcuts import render
 from . import util
 from django import forms
 import random
+from markdown2 import Markdown
 
 class SearchForm(forms.Form):
     title = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder':'Search Encyclopedia'}))
@@ -17,7 +18,7 @@ class EditEntryForm(forms.Form):
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries(),
+        "entries": sorted(util.list_entries(), key=str.casefold),
         "form": SearchForm()
     })
 
@@ -31,7 +32,7 @@ def new_entry(request):
             if entry is None:
                 util.save_entry(title, text)
                 return render(request, "encyclopedia/entry.html", {
-                    "entry": util.get_entry(title),
+                    "entry": Markdown().convert(util.get_entry(title)),
                     "title": title.capitalize(),
                     "form": SearchForm()
                 })
@@ -52,7 +53,7 @@ def entry(request, title):
     if entry == None:
         entry = "The requested page was not found."
     return render(request, "encyclopedia/entry.html", {
-        "entry": entry,
+        "entry": Markdown().convert(entry),
         "title": title,
         "form": SearchForm()
     })
@@ -86,14 +87,14 @@ def save_edit(request):
             util.save_entry(title, text)
             if entry is not None:
                 return render(request, "encyclopedia/entry.html", {
-                    "entry": util.get_entry(title),
+                    "entry": Markdown().convert(util.get_entry(title)),
                     "title": title,
                     "form": SearchForm(),
                     "message": "Edit successful."
                 })
             else:
                 return render(request, "encyclopedia/entry.html", {
-                    "entry": util.get_entry(title),
+                    "entry": Markdown().convert(util.get_entry(title)),
                     "title": title,
                     "form": SearchForm(),
                     "message": "Title changed - new entry created."
@@ -113,7 +114,7 @@ def get_random(request):
     title = random.choice(util.list_entries())
     entry = util.get_entry(title)
     return render(request, "encyclopedia/entry.html", {
-        "entry": entry,
+        "entry": Markdown().convert(entry),
         "title": title,
         "form": SearchForm()
     })
@@ -133,7 +134,7 @@ def search(request):
             })
             else:
                 return render(request, "encyclopedia/entry.html", {
-                    "entry": entry,
+                    "entry": Markdown().convert(entry),
                     "title": title.capitalize(),
                     "form": SearchForm()
                 })
