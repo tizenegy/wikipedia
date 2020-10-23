@@ -11,6 +11,11 @@ class NewEntryForm(forms.Form):
     md_text = forms.CharField(label="", widget=forms.Textarea(
         attrs={'placeholder':'Enter text in Markdown, for example:\n\n# This is a header\n1. First ordered list item\n2. Another item\n⋅⋅* Unordered sub-list.\n\nFor more go to:\nhttps://github.com/adam-p/markdown-here'}))
 
+class EditEntryForm(forms.Form):
+    title = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder':'Enter title'}))
+    md_text = forms.CharField(label="", widget=forms.Textarea(
+        attrs={'placeholder':'Enter text in Markdown, for example:\n\n# This is a header\n1. First ordered list item\n2. Another item\n⋅⋅* Unordered sub-list.\n\nFor more go to:\nhttps://github.com/adam-p/markdown-here'}))
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(),
@@ -60,11 +65,30 @@ def edit(request):
         return render(request, "encyclopedia/edit.html", {
             "entry": entry,
             "title": title,
-            "form": SearchForm()
+            "form": SearchForm(),
+            "edit_form": EditEntryForm()
         })
     return render(request, "encyclopedia/entry.html", {
         "entry": entry,
         "title": title,
+        "form": SearchForm()
+    })
+
+
+
+
+def save_edit(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        entry = util.get_entry(title)
+        return render(request, "encyclopedia/entry.html", {
+            "entry": entry,
+            "title": title,
+            "form": SearchForm()
+        })
+    return render(request, "encyclopedia/entry.html", {
+        # "entry": entry,
+        # "title": title,
         "form": SearchForm()
     })
 
