@@ -6,9 +6,7 @@
 
 {% block body %}
     <div>
-        {% autoescape off %}
-        {{ entry }}
-        {% endautoescape %}
+        {{ entry |safe}}
     </div>
     <div>
         {{ message }}
