@@ -76,23 +76,38 @@ def edit(request):
         "form": SearchForm()
     })
 
-
-
-
 def save_edit(request):
     if request.method == "POST":
-        title = request.POST.get("title")
-        entry = util.get_entry(title)
-        return render(request, "encyclopedia/entry.html", {
-            "entry": entry,
-            "title": title,
-            "form": SearchForm()
+        form = EditEntryForm(request.POST)
+        if form.is_valid():
+            text = form.cleaned_data["md_text"]
+            title = form.cleaned_data["title"]
+            entry = util.get_entry(title)
+            util.save_entry(title, text)
+            if entry is not None:
+                return render(request, "encyclopedia/entry.html", {
+                    "entry": util.get_entry(title),
+                    "title": title,
+                    "form": SearchForm(),
+                    "message": "Edit successful."
+                })
+            else:
+                return render(request, "encyclopedia/entry.html", {
+                    "entry": util.get_entry(title),
+                    "title": title,
+                    "form": SearchForm(),
+                    "message": "Title changed - new entry created."
+                })
+        return render(request, "encyclopedia/edit.html", {
+            "entry": util.get_entry(title),
+            "title": request.POST.get("title"),
+            "form": SearchForm(),
+            "message": "Edit not valid.",
+            "edit_form": EditEntryForm(initial={
+                'md_text': entry,
+                'title': title
+                })
         })
-    return render(request, "encyclopedia/entry.html", {
-        # "entry": entry,
-        # "title": title,
-        "form": SearchForm()
-    })
 
 def get_random(request):
     title = random.choice(util.list_entries())

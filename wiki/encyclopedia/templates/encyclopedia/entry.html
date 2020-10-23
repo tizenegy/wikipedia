@@ -9,6 +9,9 @@
     <div>
         {{ entry }}
     </div>
+    <div>
+        {{ message }}
+    </div>
     <form action="{% url 'encyclopedia:edit' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="title" value="{{ title }}">

@@ -7,10 +7,13 @@
 {% block body %}
     <h1>Edit: {{ title }}</h1>
     <div>
-        {{ edit_form }}
+        {{ message }}
     </div>
-    <form action="{% url 'encyclopedia:entry' title %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Save">
+    <form action="{% url 'encyclopedia:save_edit' %}" method="POST">
+        <div> 
+            {{ edit_form }}
+            {% csrf_token %}
+            <input type="submit" value="Save">
+        </div>
     </form>
 {% endblock %}
