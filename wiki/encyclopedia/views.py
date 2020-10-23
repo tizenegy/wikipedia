@@ -12,9 +12,8 @@ class NewEntryForm(forms.Form):
         attrs={'placeholder':'Enter text in Markdown, for example:\n\n# This is a header\n1. First ordered list item\n2. Another item\n⋅⋅* Unordered sub-list.\n\nFor more go to:\nhttps://github.com/adam-p/markdown-here'}))
 
 class EditEntryForm(forms.Form):
-    title = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder':'Enter title'}))
-    md_text = forms.CharField(label="", widget=forms.Textarea(
-        attrs={'placeholder':'Enter text in Markdown, for example:\n\n# This is a header\n1. First ordered list item\n2. Another item\n⋅⋅* Unordered sub-list.\n\nFor more go to:\nhttps://github.com/adam-p/markdown-here'}))
+    title = forms.CharField(label="", widget=forms.TextInput())
+    md_text = forms.CharField(label="", widget=forms.Textarea(), initial={'class'})
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -66,7 +65,10 @@ def edit(request):
             "entry": entry,
             "title": title,
             "form": SearchForm(),
-            "edit_form": EditEntryForm()
+            "edit_form": EditEntryForm(initial={
+                'md_text': entry,
+                'title': title
+                })
         })
     return render(request, "encyclopedia/entry.html", {
         "entry": entry,

@@ -7,7 +7,7 @@
 {% block body %}
     <h1>Edit: {{ title }}</h1>
     <div>
-        {{ edit_entry }}
+        {{ edit_form }}
     </div>
     <form action="{% url 'encyclopedia:entry' title %}" method="POST">
         {% csrf_token %}
