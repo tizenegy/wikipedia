@@ -11,7 +11,7 @@
     </div>
     <form action="{% url 'encyclopedia:save_edit' %}" method="POST">
         <div> 
-            {{ edit_form }}
+            {{ edit_form.as_p }}
             {% csrf_token %}
             <input type="submit" value="Save">
         </div>
